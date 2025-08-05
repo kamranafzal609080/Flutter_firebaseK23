@@ -14,49 +14,92 @@ class Getalltaskview extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-         title: Text('Get All Task') ,
+        title: Text('Get All Task'),
         actions: [
-          IconButton(onPressed: (){
-            Navigator.push(context, MaterialPageRoute(builder: (context)=>getCompletedTaskview()));
-
-          },
-
-              icon: Icon(Icons.circle),
-          ),
-          IconButton(onPressed: (){
-            Navigator.push(context, MaterialPageRoute(builder: (context)=>getinCompletedTaskview()));
-          },
-
+          IconButton(
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => getCompletedTaskview()));
+            },
             icon: Icon(Icons.circle),
           ),
-
+          IconButton(
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => getinCompletedTaskview()));
+            },
+            icon: Icon(Icons.circle),
+          ),
         ],
       ),
-      floatingActionButton:
-      FloatingActionButton(onPressed: (){
-        Navigator.push(context,
-        MaterialPageRoute(builder: (context)=>CreateTaskView())
-        );
-      },
-      child: Icon(Icons.add),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => CreateTaskView()));
+        },
+        child: Icon(Icons.add),
       ),
       body: StreamProvider.value(
-          value: TaskServices().getallTask(),
-          initialData: [Welcome ()],
-          builder: (context,child){
-            List<Welcome> taskList = context.watch<List<Welcome>>();
-            return ListView.builder(
-              itemCount: taskList.length,
-                itemBuilder: (context,i){
-                return ListTile(
-                  leading: Icon(Icons.task),
-                  title: Text(taskList[i].title.toString()),
-                  subtitle: Text(taskList[i].description.toString()),
-                );
+        value: TaskServices().getallTask(),
+        initialData: [Welcome()],
+        builder: (context, child) {
+          List<Welcome> taskList = context.watch<List<Welcome>>();
+          return ListView.builder(
+            itemCount: taskList.length,
+            itemBuilder: (context, i) {
+              return ListTile(
+                leading: Icon(Icons.task),
+                title: Text(taskList[i].title.toString()),
+                subtitle: Text(taskList[i].description.toString()),
+                trailing: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Checkbox(
+                      value: taskList[i].isCompleted,
+                      onChanged: (val) async {
+                        try {
+                          await TaskServices().markTaskAsComplete(taskList[i]);
+                        } catch (e) {
+                          ScaffoldMessenger.of(
+                            context,
+                          ).showSnackBar(SnackBar(content: Text(e.toString())));
+                        }
+                      },
+                    ),
+                    IconButton(
+                        onPressed: () async {
+                          try {
+                            await TaskServices().deleteTask(taskList[i]).then((val) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    'Tesk hes been deleted successfully',
+                                  ),
+                                ),
+                              );
 
-                },
-            );
-          },
+                            });
+                          } catch (e) {
+                            ScaffoldMessenger.of(
+                              context,
+                            ).showSnackBar(
+                                SnackBar(content: Text(e.toString())));
+                          }
+                        },
+                        icon: Icon(
+                          Icons.delete,
+                          color: Colors.red,
+                        )),
+                  ],
+                ),
+              );
+            },
+          );
+        },
       ),
     );
   }

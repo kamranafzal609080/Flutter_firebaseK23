@@ -6,7 +6,6 @@ import 'dart:convert';
 
 Welcome welcomeFromJson(String str) => Welcome.fromJson(json.decode(str));
 
-String welcomeToJson(Welcome data) => json.encode(data.toJson());
 
 class Welcome {
   final String? docId;
@@ -34,8 +33,8 @@ class Welcome {
     createdAt: json["createdAt"],
   );
 
-  Map<String, dynamic> toJson() => {
-    "docId": docId,
+  Map<String, dynamic> toJson(String taskId) => {
+    "docId": taskId,
     "title": title,
     "description": description,
     "image": image,
