@@ -1,5 +1,6 @@
 import 'package:fahad_khan/Services/Task.dart';
 import 'package:fahad_khan/views/GetinCompletedTask.dart';
+import 'package:fahad_khan/views/update%20task.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -93,7 +94,12 @@ class Getalltaskview extends StatelessWidget {
                         icon: Icon(
                           Icons.delete,
                           color: Colors.red,
-                        )),
+                        ),
+                    ),
+                    IconButton(onPressed: ()async{
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=>updateTaskView(model: taskList[i])));
+                    }, 
+                        icon: Icon(Icons.edit,color: Colors.blue,),),
                   ],
                 ),
               );
