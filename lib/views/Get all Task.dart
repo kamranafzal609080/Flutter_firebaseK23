@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import '../Model/Task.dart';
 import 'CreateTask.dart';
 import 'GetCompletedTask.dart';
+import 'get all priority.dart';
 
 class Getalltaskview extends StatelessWidget {
   const Getalltaskview({super.key});
@@ -17,6 +18,15 @@ class Getalltaskview extends StatelessWidget {
       appBar: AppBar(
         title: Text('Get All Task'),
         actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => GetallpriorityView()),
+              );
+            },
+            icon: Icon(Icons.category),
+          ),
           IconButton(
             onPressed: () {
               Navigator.push(
