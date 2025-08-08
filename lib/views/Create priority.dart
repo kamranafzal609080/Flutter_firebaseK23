@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import '../Model/Priority.dart';
 
 class Createpriority extends StatefulWidget {
-  const Createpriority({super.key});
+   Createpriority({super.key});
 
   @override
   State<Createpriority> createState() => _CreatepriorityState();
@@ -36,18 +36,13 @@ class _CreatepriorityState extends State<Createpriority> {
               try {
                 isLoading = true;
                 setState(() {});
-                await PriorityServices()
-                    .createPriority(
+                await PriorityServices().createPriority(
                   PrioritiyModel(
                    name: nameCotroller.text,
-                    createdAt: DateTime
-                        .now()
-                        .millisecondsSinceEpoch,
+                    createdAt: DateTime.now().millisecondsSinceEpoch,
+
                   ),
-                )
-                    .then((val) {
-                  isLoading = false;
-                  setState(() {});
+                ).then((val) {
                   showDialog(context: context, builder: (context) {
                     return AlertDialog(
                       title: Text('Message'),

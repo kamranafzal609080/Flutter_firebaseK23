@@ -33,7 +33,7 @@ class PriorityServices {
   ///Get all priorities
   Stream<List<PrioritiyModel>> getAllPriorities() {
     return FirebaseFirestore.instance
-        .collection('priorityCollection')
+        .collection('priortyCollection')
         .snapshots()
         .map(
           (priorityList) =>

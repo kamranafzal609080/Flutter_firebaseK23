@@ -89,7 +89,11 @@ class Getalltaskview extends StatelessWidget {
                                 SnackBar(
                                   content: Text(
                                     'Tesk hes been deleted successfully',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                    ),
                                   ),
+                                  backgroundColor: Colors.red,
                                 ),
                               );
 

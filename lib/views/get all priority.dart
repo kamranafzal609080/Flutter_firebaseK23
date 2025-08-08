@@ -31,44 +31,51 @@ class GetallpriorityView extends StatelessWidget {
           return ListView.builder(
               itemCount: priorityList.length,
               itemBuilder: (context, i) {
-            return ListTile(
-                leading: Icon(Icons.category),
-                title: Text(priorityList[i].name.toString()),
-                trailing: Row(mainAxisSize: MainAxisSize.min, children: [
-                  IconButton(
-                    onPressed: () async {
-                      try {
-                        await PriorityServices()
-                            .DeletePriority(priorityList[i])
-                            .then((val) {
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                              content: Text(
-                                  'Priority has been deleted successfully')));
-                        });
-                      } catch (e) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text(e.toString())));
-                      }
-                    },
-                    icon: Icon(
-                      Icons.delete,
-                      color: Colors.red,
-                    ),
-                  ),
-                  IconButton(
-                    onPressed: () async {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              updatepriority(model: priorityList[i]),
+                return ListTile(
+                    leading: Icon(Icons.category),
+                    title: Text(priorityList[i].name.toString()),
+                    trailing: Row(mainAxisSize: MainAxisSize.min, children: [
+                      IconButton(
+                        onPressed: () async {
+                          try {
+                            await PriorityServices()
+                                .DeletePriority(priorityList[i])
+                                .then((val) {
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
+                                content: Text(
+                                  'Priority has been deleted successfully',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                backgroundColor: Colors.red,
+                              ));
+                            });
+                          } catch (e) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text(e.toString())));
+                          }
+                        },
+                        icon: Icon(
+                          Icons.delete,
+                          color: Colors.red,
                         ),
-                      );
-                    },
-                    icon: Icon(Icons.edit, color: Colors.blue),
-                  ),
-                ]));
-          });
+                      ),
+                      IconButton(
+                        onPressed: () async {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  updatepriority(model: priorityList[i]),
+                            ),
+                          );
+                        },
+                        icon: Icon(Icons.edit, color: Colors.blue),
+                      ),
+                    ]));
+              });
         },
       ),
     );
