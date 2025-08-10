@@ -1,4 +1,5 @@
 import 'package:fahad_khan/Services/priority.dart';
+import 'package:fahad_khan/views/priority%20task.dart';
 import 'package:fahad_khan/views/update%20priotiy.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -7,7 +8,7 @@ import '../Model/Priority.dart';
 import 'Create priority.dart';
 
 class GetallpriorityView extends StatelessWidget {
-  const GetallpriorityView({super.key});
+   GetallpriorityView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -74,8 +75,23 @@ class GetallpriorityView extends StatelessWidget {
                         },
                         icon: Icon(Icons.edit, color: Colors.blue),
                       ),
-                    ]));
-              });
+                      IconButton(
+                        onPressed: () async {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  PriorityTaskView(model: priorityList[i]),
+                            ),
+                          );
+                        },
+                        icon: Icon(Icons.arrow_forward, color: Colors.blue),
+                      ),
+                    ]
+                    ),
+                );
+              }
+              );
         },
       ),
     );

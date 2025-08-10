@@ -19,20 +19,22 @@ class TaskServices {
   }
 
   ///delete task
-  Future deleteTask(Welcome model) async {
+  Future deleteTask(String taskID) async {
     return await FirebaseFirestore.instance
         .collection('taskCollection')
-        .doc(model.docId)
+        .doc(taskID)
         .delete();
   }
 
   /// Mark task as Complete
-  Future markTaskAsComplete(Welcome model) async {
-
+  Future markTaskAsComplete({
+    required String taskID,
+    required bool isCompleted,
+}) async {
     return await FirebaseFirestore.instance
         .collection('taskCollection')
-        .doc(model.docId)
-        .update({'isCompleted': true});
+        .doc(taskID)
+        .update({'isCompleted': isCompleted});
   }
 
   ///Get All Task
@@ -56,13 +58,28 @@ class TaskServices {
         .toList());
   }
   ///Get InCompleted Task
-  Stream<List<Welcome>> getInCompletedTask() {
+  Stream<List<Welcome>> getInCompletedTasks() {
     return FirebaseFirestore.instance
         .collection('taskCollection')
-        .where('isCompleted',isEqualTo: false)
+        .where('isCompleted', isEqualTo: false)
         .snapshots()
-        .map((taskList) => taskList.docs
-        .map((taskJson) => Welcome.fromJson(taskJson.data()))
-        .toList());
+        .map(
+          (taskList) => taskList.docs
+          .map((taskJson) => Welcome.fromJson(taskJson.data()))
+          .toList(),
+    );
+  }
+
+  /// get priority task
+  Stream<List<Welcome>> getPriorityTask(String priorityID) {
+    return FirebaseFirestore.instance
+        .collection('taskCollection')
+        .where('priorityID', isEqualTo: priorityID)
+        .snapshots()
+        .map(
+          (taskList) => taskList.docs
+          .map((taskJson) => Welcome.fromJson(taskJson.data()))
+          .toList(),
+    );
   }
 }

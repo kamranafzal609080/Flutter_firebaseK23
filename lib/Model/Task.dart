@@ -10,8 +10,9 @@ Welcome welcomeFromJson(String str) => Welcome.fromJson(json.decode(str));
 class Welcome {
   final String? docId;
   final String? title;
-  final String? description;
   final String? image;
+  final String? description;
+  final String? priorityID;
   final bool? isCompleted;
   final int? createdAt;
 
@@ -19,6 +20,7 @@ class Welcome {
     this.docId,
     this.title,
     this.description,
+    this.priorityID,
     this.image,
     this.isCompleted,
     this.createdAt,
@@ -28,6 +30,7 @@ class Welcome {
     docId: json["docId"],
     title: json["title"],
     description: json["description"],
+    priorityID: json["priorityID"],
     image: json["image"],
     isCompleted: json["isCompleted"],
     createdAt: json["createdAt"],
@@ -37,6 +40,7 @@ class Welcome {
     "docId": taskId,
     "title": title,
     "description": description,
+    "priorityID": priorityID,
     "image": image,
     "isCompleted": isCompleted,
     "createdAt": createdAt,

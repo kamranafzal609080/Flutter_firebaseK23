@@ -14,7 +14,7 @@ class getinCompletedTaskview extends StatelessWidget {
         title: Text('Get incomplated Task') ,
       ),
       body: StreamProvider.value(
-        value: TaskServices().getInCompletedTask(),
+        value: TaskServices().getInCompletedTasks(),
         initialData: [Welcome ()],
         builder: (context,child){
           List<Welcome> taskList = context.watch<List<Welcome>>();

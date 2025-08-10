@@ -73,7 +73,9 @@ class Getalltaskview extends StatelessWidget {
                       value: taskList[i].isCompleted,
                       onChanged: (val) async {
                         try {
-                          await TaskServices().markTaskAsComplete(taskList[i]);
+                          await TaskServices().markTaskAsComplete(
+                            taskID: taskList[i].docId.toString(),
+                            isCompleted: val!,);
                         } catch (e) {
                           ScaffoldMessenger.of(
                             context,
@@ -84,7 +86,8 @@ class Getalltaskview extends StatelessWidget {
                     IconButton(
                         onPressed: () async {
                           try {
-                            await TaskServices().deleteTask(taskList[i]).then((val) {
+                            await TaskServices().deleteTask(taskList[i].docId.toString())
+                                .then((val) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
                                   content: Text(

@@ -1,6 +1,9 @@
 import 'package:fahad_khan/Model/Task.dart';
 import 'package:fahad_khan/Services/Task.dart';
+import 'package:fahad_khan/Services/priority.dart';
 import 'package:flutter/material.dart';
+
+import '../Model/Priority.dart';
 
 class CreateTaskView extends StatefulWidget {
   const CreateTaskView({super.key});
@@ -14,6 +17,18 @@ class _CreateTaskViewState extends State<CreateTaskView> {
   TextEditingController descriptionController = TextEditingController();
 
   bool isloading = false;
+  List<PrioritiyModel> priorityList = [];
+  PrioritiyModel? _selectedPriority;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    PriorityServices().getAllPriorities().first.then((val){
+      priorityList = val;
+      setState(() {});
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,9 +45,22 @@ class _CreateTaskViewState extends State<CreateTaskView> {
           TextField(
             controller: descriptionController,
           ),
-          SizedBox(
-            height: 20,
-          ),
+          SizedBox(height: 20,),
+          DropdownButton(
+              items: priorityList.map((e){
+            return DropdownMenuItem( value : e,child: Text(e.name.toString()));
+          }).toList(),
+              isExpanded: true,
+              value: _selectedPriority,
+              hint: Text("Selected Prioity"),
+              onChanged: (val){
+            _selectedPriority = val;
+            setState(() {
+
+            });
+              }),
+          SizedBox(height: 20,),
+
           isloading
               ? Center(
                   child: CircularProgressIndicator(),
@@ -69,6 +97,7 @@ class _CreateTaskViewState extends State<CreateTaskView> {
                           title: titleController.text,
                           description: descriptionController.text,
                           isCompleted: false,
+                          priorityID: _selectedPriority!.docId.toString(),
                           createdAt: DateTime.now().millisecondsSinceEpoch,
                         ),
                       )
