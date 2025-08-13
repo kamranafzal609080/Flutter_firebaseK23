@@ -19,69 +19,71 @@ class _ResetPasswordViewState extends State<ResetPasswordView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text("Reset Password")),
-      body: Column(
-        children: [
-          TextField(controller: emailController,
-        decoration:  InputDecoration(
-          border: OutlineInputBorder(),
-          labelText: "Email",
-          ),
-          ),
-          SizedBox(height: 20),
-          isLoading
-              ? Center(child: CircularProgressIndicator())
-              : ElevatedButton(
-            onPressed: () async {
-              if (emailController.text.isEmpty) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text("Email cannot be empty.")),
-                );
-                return;
-              }
-              try {
-                isLoading = true;
-                setState(() {});
-                await AuthServices()
-                    .resetPassword(emailController.text)
-                    .then((val) {
-                  showDialog(
-                    context: context,
-                    builder: (context) {
-                      return AlertDialog(
-                        title: Text("Message"),
-                        content: Text(
-                          "Password reset link has been sent to your mail box.",
-                        ),
-                        actions: [
-                          TextButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => LiginView(),
-                                ),
-                              );
-                            },
-                            child: Text("Okay"),
-                          ),
-                        ],
-                      );
-                    },
+      body: Center(
+        child: Column(
+          children: [
+            TextField(controller: emailController,
+          decoration:  InputDecoration(
+            border: OutlineInputBorder(),
+            labelText: "Email",
+            ),
+            ),
+            SizedBox(height: 20),
+            isLoading
+                ? Center(child: CircularProgressIndicator())
+                : ElevatedButton(
+              onPressed: () async {
+                if (emailController.text.isEmpty) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text("Email cannot be empty.")),
                   );
-                });
-              } catch (e) {
-                isLoading = false;
-                setState(() {});
-                ScaffoldMessenger.of(
-                  context,
-                ).showSnackBar(SnackBar(content: Text(e.toString())));
-              }
-            },
-            child: Text("Reset Password"),
-          ),
-          SizedBox(height: 20),
-          ElevatedButton(onPressed: () {}, child: Text("Go to SignUp")),
-        ],
+                  return;
+                }
+                try {
+                  isLoading = true;
+                  setState(() {});
+                  await AuthServices()
+                      .resetPassword(emailController.text)
+                      .then((val) {
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          title: Text("Message"),
+                          content: Text(
+                            "Password reset link has been sent to your mail box.",
+                          ),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => LiginView(),
+                                  ),
+                                );
+                              },
+                              child: Text("Okay"),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  });
+                } catch (e) {
+                  isLoading = false;
+                  setState(() {});
+                  ScaffoldMessenger.of(
+                    context,
+                  ).showSnackBar(SnackBar(content: Text(e.toString())));
+                }
+              },
+              child: Text("Reset Password"),
+            ),
+            SizedBox(height: 20),
+            ElevatedButton(onPressed: () {}, child: Text("Go to SignUp")),
+          ],
+        ),
       ),
     );
   }
