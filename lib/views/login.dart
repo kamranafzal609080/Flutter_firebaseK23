@@ -1,7 +1,11 @@
+import 'package:fahad_khan/Services/user.dart';
+import 'package:fahad_khan/views/profile.dart';
 import 'package:fahad_khan/views/register.dart';
 import 'package:fahad_khan/views/reset%20pwd.dart';
 import 'package:flutter/material.dart';
-import '../Services/Auth.dart'; // apna service file ka path
+import 'package:provider/provider.dart';
+import '../Services/Auth.dart';
+import '../provider/user.dart'; // apna service file ka path
 
 class LiginView extends StatefulWidget {
   const LiginView({super.key});
@@ -17,9 +21,11 @@ class _LiginViewState extends State<LiginView> {
 
   @override
   Widget build(BuildContext context) {
+    var user = Provider.of<UserProvider>(context);
     return Scaffold(
       appBar: AppBar(
         title:  Text('Login'),
+        
       ),
       body: Padding(
         padding:  EdgeInsets.all(16.0),
@@ -75,7 +81,10 @@ class _LiginViewState extends State<LiginView> {
                   await AuthServices().loginUser(
                     email: emailController.text.trim(),
                     password: passwordController.text.trim(),
-                  ).then((val) {
+                  ).then((val) async {
+                    await UserServices().getUser(val.uid).then((userDate){
+                      user.setUser(userDate);
+                    });
                     isLoading = false;
                     setState(() {});
 
@@ -89,7 +98,9 @@ class _LiginViewState extends State<LiginView> {
                               "User has been logged in successfully"),
                           actions: [
                             TextButton(
-                              onPressed: () {}, // close dialog
+                              onPressed: () {
+                                Navigator.push(context, MaterialPageRoute(builder: (context)=>profileDome()));
+                              }, // close dialog
                               child: Text("Okay"),
                             ),
                           ],

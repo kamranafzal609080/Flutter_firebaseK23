@@ -18,9 +18,9 @@ class _ResetPasswordViewState extends State<ResetPasswordView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Reset Password")),
+      appBar: AppBar(title: Text("Reset Password"),
+      ),
       body: Center(
-
         child: Column(
           children: [
             TextField(controller: emailController,
@@ -55,7 +55,7 @@ class _ResetPasswordViewState extends State<ResetPasswordView> {
                             "Password reset link has been sent to your mail box.",
                           ),
                           actions: [
-                            TextButton(
+                            MaterialButton(
                               onPressed: () {
                                 Navigator.push(
                                   context,
@@ -82,7 +82,6 @@ class _ResetPasswordViewState extends State<ResetPasswordView> {
               child: Text("Reset Password"),
             ),
             SizedBox(height: 20),
-            ElevatedButton(onPressed: () {}, child: Text("Go to SignUp")),
           ],
         ),
       ),
