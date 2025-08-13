@@ -20,6 +20,7 @@ class _ResetPasswordViewState extends State<ResetPasswordView> {
     return Scaffold(
       appBar: AppBar(title: Text("Reset Password")),
       body: Center(
+
         child: Column(
           children: [
             TextField(controller: emailController,
