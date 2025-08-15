@@ -5,7 +5,8 @@ import 'package:fahad_khan/views/reset%20pwd.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../Services/Auth.dart';
-import '../provider/user.dart'; // apna service file ka path
+import '../provider/user.dart';
+import 'Get all Task.dart';
 
 class LiginView extends StatefulWidget {
   const LiginView({super.key});
@@ -22,133 +23,192 @@ class _LiginViewState extends State<LiginView> {
   @override
   Widget build(BuildContext context) {
     var user = Provider.of<UserProvider>(context);
+
     return Scaffold(
-      appBar: AppBar(
-        title:  Text('Login'),
-        
-      ),
-      body: Padding(
-        padding:  EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            // Email
-            TextField(
-              controller: emailController,
-              decoration:  InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: "Email",
+      body: Stack(
+        children: [
+          // Blue Curved Header
+          Container(
+            height: 300,
+            width: double.infinity,
+            decoration: const BoxDecoration(
+              color: Colors.blue,
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(120),
               ),
             ),
-             SizedBox(height: 12),
-
-            // Password
-            TextField(
-              controller: passwordController,
-              obscureText: true,
-              decoration:  InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: "Password",
+          ),
+          Positioned(
+            top: 100,
+            left: 40,
+            child: const Text(
+              "Login",
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 40,
+                fontWeight: FontWeight.bold,
               ),
             ),
-             SizedBox(height: 20),
+          ),
 
-            // Login Button
-            isLoading
-                ?  CircularProgressIndicator()
-                : ElevatedButton(
-              onPressed: () async {
-                if (emailController.text.isEmpty) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                     SnackBar(
-                        content: Text("Email cannot be empty.")),
-                  );
-                  return;
-                }
-                if (passwordController.text.isEmpty) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                     SnackBar(
-                        content: Text("Password cannot be empty.")),
-                  );
-                  return;
-                }
+          // Main Login Form
+          SafeArea(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Column(
+                children: [
+                  const SizedBox(height: 300),
 
-                try {
-                  isLoading = true;
-                  setState(() {
-                  });
+                  // Email
+                  TextField(
+                    controller: emailController,
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: "Email",
+                    ),
+                  ),
+                  const SizedBox(height: 12),
 
-                  await AuthServices().loginUser(
-                    email: emailController.text.trim(),
-                    password: passwordController.text.trim(),
-                  ).then((val) async {
-                    await UserServices().getUser(val.uid).then((userDate){
-                      user.setUser(userDate);
-                    });
-                    isLoading = false;
-                    setState(() {});
+                  // Password
+                  TextField(
+                    controller: passwordController,
+                    obscureText: true,
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: "Password",
+                    ),
+                  ),
+                  const SizedBox(height: 20),
 
-                    // Success Dialog
-                    showDialog(
-                      context: context,
-                      builder: (context) {
-                        return AlertDialog(
-                          title: Text("Message"),
-                          content: Text(
-                              "User has been logged in successfully"),
-                          actions: [
-                            TextButton(
-                              onPressed: () {
-                                Navigator.push(context, MaterialPageRoute(builder: (context)=>profileDome()));
-                              }, // close dialog
-                              child: Text("Okay"),
-                            ),
-                          ],
+                  // Login Button
+                  isLoading
+                      ? const CircularProgressIndicator()
+                      : ElevatedButton(
+                    onPressed: () async {
+                      if (emailController.text.isEmpty) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text("Email cannot be empty."),
+                          ),
                         );
-                      },
-                    );
-                  });
-                } catch (e) {
-                  isLoading = false;
-                  setState(() {
-                  });
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text(e.toString())),
-                  );
-                }
-              },
-              child:  Text('Login'),
-            ),
-             SizedBox(height: 20),
+                        return;
+                      }
+                      if (passwordController.text.isEmpty) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text("Password cannot be empty."),
+                          ),
+                        );
+                        return;
+                      }
 
-            // Go to SignUp
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => RegisterView(), // Replace with SignUpView()
-                  ),
-                );
-              },
-              child:  Text("Go to SignUp"),
-            ),
-             SizedBox(height: 20),
+                      try {
+                        isLoading = true;
+                        setState(() {});
 
-            // Go to Reset Password
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ResetPasswordView(), // Replace with ResetPasswordView()
+                        await AuthServices()
+                            .loginUser(
+                          email: emailController.text.trim(),
+                          password: passwordController.text.trim(),
+                        )
+                            .then((val) async {
+                          await UserServices()
+                              .getUser(val.uid)
+                              .then((userDate) {
+                            user.setUser(userDate);
+                          });
+
+                          isLoading = false;
+                          setState(() {});
+
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                title: const Text("Message"),
+                                content: const Text(
+                                    "User has been logged in successfully"),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              GetAllTaskView(),
+                                        ),
+                                      );
+                                    },
+                                    child: const Text("Okay"),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        });
+                      } catch (e) {
+                        isLoading = false;
+                        setState(() {});
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text(e.toString())),
+                        );
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blue,
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 40, vertical: 12),
+                    ),
+                    child: const Text(
+                      'Login',
+                      style: TextStyle(color: Colors.white),
+                    ),
                   ),
-                );
-              },
-              child:  Text("Go to Reset Password"),
+                  const SizedBox(height: 20),
+
+                  // Go to SignUp
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const RegisterView(),
+                        ),
+                      );
+                    },
+                    child: const Text(
+                      "Go to signUP",
+                      style: TextStyle(
+                        color: Colors.blue,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ),
+                   SizedBox(height: 20),
+
+                  // Go to Reset Password (Text link instead of button)
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ResetPasswordView(),
+                        ),
+                      );
+                    },
+                    child: const Text(
+                      "Forgot Password",
+                      style: TextStyle(
+                        color: Colors.blue,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

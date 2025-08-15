@@ -1,9 +1,12 @@
 import 'package:fahad_khan/Model/Task.dart';
 import 'package:fahad_khan/Services/Task.dart';
 import 'package:fahad_khan/Services/priority.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../Model/Priority.dart';
+import '../provider/user.dart';
 
 class CreateTaskView extends StatefulWidget {
   const CreateTaskView({super.key});
@@ -32,6 +35,7 @@ class _CreateTaskViewState extends State<CreateTaskView> {
 
   @override
   Widget build(BuildContext context) {
+    var user = Provider.of<UserProvider>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text('Create Task '),
@@ -97,6 +101,7 @@ class _CreateTaskViewState extends State<CreateTaskView> {
                           title: titleController.text,
                           description: descriptionController.text,
                           isCompleted: false,
+                          userID: user.getUser().docId.toString(),
                           priorityID: _selectedPriority!.docId.toString(),
                           createdAt: DateTime.now().millisecondsSinceEpoch,
                         ),

@@ -38,9 +38,10 @@ class TaskServices {
   }
 
   ///Get All Task
-  Stream<List<Welcome>> getallTask() {
+  Stream<List<Welcome>> getallTask(String userID) {
     return FirebaseFirestore.instance
         .collection('taskCollection')
+        .where('userID', isEqualTo: userID)
         .snapshots()
         .map((taskList) => taskList.docs
             .map((taskJson) => Welcome.fromJson(taskJson.data()))

@@ -13,6 +13,7 @@ class Welcome {
   final String? image;
   final String? description;
   final String? priorityID;
+  final String? userID;
   final bool? isCompleted;
   final int? createdAt;
 
@@ -22,6 +23,7 @@ class Welcome {
     this.description,
     this.priorityID,
     this.image,
+    this.userID,
     this.isCompleted,
     this.createdAt,
   });
@@ -31,6 +33,7 @@ class Welcome {
     title: json["title"],
     description: json["description"],
     priorityID: json["priorityID"],
+    userID: json["userID"],
     image: json["image"],
     isCompleted: json["isCompleted"],
     createdAt: json["createdAt"],
@@ -41,6 +44,7 @@ class Welcome {
     "title": title,
     "description": description,
     "priorityID": priorityID,
+    "userID": userID,
     "image": image,
     "isCompleted": isCompleted,
     "createdAt": createdAt,

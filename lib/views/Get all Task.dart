@@ -1,22 +1,24 @@
-import 'package:fahad_khan/Services/Task.dart';
+import 'package:fahad_khan/Model/Task.dart';
+import 'package:fahad_khan/views/GetCompletedTask.dart';
 import 'package:fahad_khan/views/GetinCompletedTask.dart';
 import 'package:fahad_khan/views/update%20task.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../Model/Task.dart';
+import '../Services/Task.dart';
+import '../provider/user.dart';
 import 'CreateTask.dart';
-import 'GetCompletedTask.dart';
 import 'get all priority.dart';
 
-class Getalltaskview extends StatelessWidget {
-  const Getalltaskview({super.key});
+class GetAllTaskView extends StatelessWidget {
+  const GetAllTaskView({super.key});
 
   @override
   Widget build(BuildContext context) {
+    var user = Provider.of<UserProvider>(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text('Get All Task'),
+        title: Text("Get All Task"),
         actions: [
           IconButton(
             onPressed: () {
@@ -30,36 +32,43 @@ class Getalltaskview extends StatelessWidget {
           IconButton(
             onPressed: () {
               Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => getCompletedTaskview()));
+                context,
+                MaterialPageRoute(builder: (context) => getCompletedTaskview()),
+              );
             },
             icon: Icon(Icons.circle),
           ),
           IconButton(
             onPressed: () {
               Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => getinCompletedTaskview()));
+                context,
+                MaterialPageRoute(
+                  builder: (context) => getinCompletedTaskview(),
+                ),
+              );
             },
-            icon: Icon(Icons.circle),
+            icon: Icon(Icons.incomplete_circle),
           ),
         ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => CreateTaskView()));
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => CreateTaskView()),
+          );
         },
         child: Icon(Icons.add),
       ),
       body: StreamProvider.value(
-        value: TaskServices().getallTask(),
+        value: TaskServices().getallTask(user.getUser().docId.toString()),
         initialData: [Welcome()],
         builder: (context, child) {
           List<Welcome> taskList = context.watch<List<Welcome>>();
-          return ListView.builder(
+          return taskList.isNotEmpty
+              ? taskList[0].docId == null
+              ? Center(child: CircularProgressIndicator())
+              : ListView.builder(
             itemCount: taskList.length,
             itemBuilder: (context, i) {
               return ListTile(
@@ -75,53 +84,63 @@ class Getalltaskview extends StatelessWidget {
                         try {
                           await TaskServices().markTaskAsComplete(
                             taskID: taskList[i].docId.toString(),
-                            isCompleted: val!,);
+                            isCompleted: val!,
+                          );
                         } catch (e) {
                           ScaffoldMessenger.of(
                             context,
-                          ).showSnackBar(SnackBar(content: Text(e.toString())));
+                          ).showSnackBar(
+                            SnackBar(content: Text(e.toString())),
+                          );
                         }
                       },
                     ),
                     IconButton(
-                        onPressed: () async {
-                          try {
-                            await TaskServices().deleteTask(taskList[i].docId.toString())
-                                .then((val) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(
-                                    'Tesk hes been deleted successfully',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                  backgroundColor: Colors.red,
-                                ),
-                              );
-
-                            });
-                          } catch (e) {
+                      onPressed: () async {
+                        try {
+                          await TaskServices()
+                              .deleteTask(
+                            taskList[i].docId.toString(),
+                          )
+                              .then((val) {
                             ScaffoldMessenger.of(
                               context,
                             ).showSnackBar(
-                                SnackBar(content: Text(e.toString())));
-                          }
-                        },
-                        icon: Icon(
-                          Icons.delete,
-                          color: Colors.red,
-                        ),
+                              SnackBar(
+                                content: Text(
+                                  "Task has been deleted successfully",
+                                ),
+                              ),
+                            );
+                          });
+                        } catch (e) {
+                          ScaffoldMessenger.of(
+                            context,
+                          ).showSnackBar(
+                            SnackBar(content: Text(e.toString())),
+                          );
+                        }
+                      },
+                      icon: Icon(Icons.delete, color: Colors.red),
                     ),
-                    IconButton(onPressed: ()async{
-                      Navigator.push(context, MaterialPageRoute(builder: (context)=>updateTaskView(model: taskList[i])));
-                    }, 
-                        icon: Icon(Icons.edit,color: Colors.blue,),),
+                    IconButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                updateTaskView(model: taskList[i]),
+                          ),
+                        );
+                      },
+                      icon: Icon(Icons.edit, color: Colors.blue),
+                    ),
                   ],
                 ),
               );
             },
-          );
+          )
+              : Center(child: Text("No Data Found!"));
         },
       ),
     );
