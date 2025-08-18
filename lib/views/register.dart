@@ -22,11 +22,13 @@ class _RegisterViewState extends State<RegisterView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Register")),
+      appBar: AppBar(title: Text("Register"),
+      backgroundColor: Colors.blue,),
       body: SingleChildScrollView(
         child: Center(
           child: Column(
             children: [
+              SizedBox(height: 40,),
               TextField(controller: nameController,
           decoration:  InputDecoration(
               border: OutlineInputBorder(),

@@ -9,7 +9,7 @@ import '../provider/user.dart';
 import 'Get all Task.dart';
 
 class LiginView extends StatefulWidget {
-  const LiginView({super.key});
+   LiginView({super.key});
 
   @override
   State<LiginView> createState() => _LiginViewState();
@@ -31,7 +31,7 @@ class _LiginViewState extends State<LiginView> {
           Container(
             height: 300,
             width: double.infinity,
-            decoration: const BoxDecoration(
+            decoration:  BoxDecoration(
               color: Colors.blue,
               borderRadius: BorderRadius.only(
                 bottomLeft: Radius.circular(120),
@@ -41,7 +41,7 @@ class _LiginViewState extends State<LiginView> {
           Positioned(
             top: 100,
             left: 40,
-            child: const Text(
+            child:  Text(
               "Login",
               style: TextStyle(
                 color: Colors.white,
@@ -54,40 +54,64 @@ class _LiginViewState extends State<LiginView> {
           // Main Login Form
           SafeArea(
             child: SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
+              padding:  EdgeInsets.symmetric(horizontal: 16),
               child: Column(
                 children: [
-                  const SizedBox(height: 300),
+                   SizedBox(height: 300),
 
                   // Email
                   TextField(
                     controller: emailController,
-                    decoration: const InputDecoration(
+                    decoration:  InputDecoration(
                       border: OutlineInputBorder(),
                       labelText: "Email",
                     ),
                   ),
-                  const SizedBox(height: 12),
+                   SizedBox(height: 12),
 
                   // Password
                   TextField(
                     controller: passwordController,
                     obscureText: true,
-                    decoration: const InputDecoration(
+                    decoration:  InputDecoration(
                       border: OutlineInputBorder(),
                       labelText: "Password",
                     ),
                   ),
-                  const SizedBox(height: 20),
-
-                  // Login Button
+                   SizedBox(height: 10),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ResetPasswordView(),
+                            ),
+                          );
+                        },
+                        child:  Text(
+                          "Forgot Password",
+                          style: TextStyle(
+                            color: Colors.blue,
+                            fontSize: 16,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  // Lo
+                  // Sizegin Button
+                  SizedBox(height: 20,),
                   isLoading
-                      ? const CircularProgressIndicator()
+                      ?  CircularProgressIndicator()
                       : ElevatedButton(
+
                     onPressed: () async {
                       if (emailController.text.isEmpty) {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
+                           SnackBar(
                             content: Text("Email cannot be empty."),
                           ),
                         );
@@ -95,7 +119,7 @@ class _LiginViewState extends State<LiginView> {
                       }
                       if (passwordController.text.isEmpty) {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
+                           SnackBar(
                             content: Text("Password cannot be empty."),
                           ),
                         );
@@ -125,8 +149,8 @@ class _LiginViewState extends State<LiginView> {
                             context: context,
                             builder: (context) {
                               return AlertDialog(
-                                title: const Text("Message"),
-                                content: const Text(
+                                title:  Text("Message"),
+                                content:  Text(
                                     "User has been logged in successfully"),
                                 actions: [
                                   TextButton(
@@ -139,7 +163,7 @@ class _LiginViewState extends State<LiginView> {
                                         ),
                                       );
                                     },
-                                    child: const Text("Okay"),
+                                    child:  Text("Okay"),
                                   ),
                                 ],
                               );
@@ -156,54 +180,49 @@ class _LiginViewState extends State<LiginView> {
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.blue,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 40, vertical: 12),
-                    ),
-                    child: const Text(
-                      'Login',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
-                  const SizedBox(height: 20),
+                      padding:  EdgeInsets.symmetric(
+                          horizontal: 160, vertical: 18),
 
-                  // Go to SignUp
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const RegisterView(),
-                        ),
-                      );
-                    },
-                    child: const Text(
-                      "Go to signUP",
-                      style: TextStyle(
-                        color: Colors.blue,
-                        fontSize: 16,
-                      ),
                     ),
+                    child:  Text(
+                      'Login',
+                      style: TextStyle(color: Colors.white,),
+                    ),
+
+                  ),
+SizedBox(height: 59,),
+                  // Go to SignUp
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Don't have an account? ",
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 16,
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>  RegisterView(),
+                            ),
+                          );
+                        },
+                        child: Text('SignUp',
+                          style: TextStyle(
+                            color: Colors.blue,
+                            fontSize: 16,
+                          ),),
+                      )
+                    ],
                   ),
                    SizedBox(height: 20),
 
                   // Go to Reset Password (Text link instead of button)
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ResetPasswordView(),
-                        ),
-                      );
-                    },
-                    child: const Text(
-                      "Forgot Password",
-                      style: TextStyle(
-                        color: Colors.blue,
-                        fontSize: 16,
-                      ),
-                    ),
-                  ),
+
                 ],
               ),
             ),
